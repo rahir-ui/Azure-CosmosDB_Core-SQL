@@ -1,1 +1,1 @@
-# Azure-CosmosDB_Core-SQL
+# Azure CosmosDB (Core) SQL
