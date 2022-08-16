@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Location for all resources."
+            }
+        },
+        "accountName": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 44,
+            "metadata": {
+                "description": "Cosmos DB account name (must contain only lowercase letters, digits, and hyphens)"
+            }
+        },
+        "publicNetworkAccess": {
+            "type": "string",
+            "defaultValue": "Disabled",
+            "allowedValues": [
+                "Enabled",
+                "Disabled"
+            ],
+            "metadata": {
+                "description": "Enable public network traffic to access the account; if set to Disabled, public network traffic will be blocked even before the private endpoint is created"
+            }
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts",
+            "apiVersion": "2021-04-15",
+            "name": "[parameters('accountName')]",
+            "location": "[parameters('location')]",
+            "kind": "GlobalDocumentDB",
+            "properties": {
+                "consistencyPolicy": {
+                    "defaultConsistencyLevel": "Session"
+                },
+                "locations": "[variables('locations')]",
+                "databaseAccountOfferType": "Standard",
+                "enableAutomaticFailover": false,
+                "isVirtualNetworkFilterEnabled": false,
+                "enableMultipleWriteLocations": false,
+                "publicNetworkAccess": "[parameters('publicNetworkAccess')]"
+            }
+        }
+    ]
+}
